@@ -1,4 +1,0 @@
-{
-    "appService.defaultWebAppToDeploy": "/subscriptions/63c182eb-f1b5-4062-8190-1d2a4eacbd18/resourceGroups/python-examples/providers/Microsoft.Web/sites/webscrapingdemo",
-    "appService.deploySubpath": "."
-}
