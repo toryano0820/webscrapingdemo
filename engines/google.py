@@ -3,14 +3,21 @@ import requests
 
 
 HEADERS = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.83 Safari/537.36 Edg/85.0.564.41'
+    'User-Agent': 'Chrome/85.0.4183.83'
 }
 
 
 def get_weather(location: str, lang: str = 'en-US') -> dict:
     url = f'https://www.google.com/search?hl={lang}&q=weather in {location}'
-    content = requests.get(url, headers=HEADERS).content
-    tree = html.fromstring(content)
+    response = requests.get(url, headers=HEADERS)
+    status_code = response.status_code
+
+    if status_code == 429:
+        raise Exception('blocked by google')
+    elif status_code != 200:
+        raise Exception(f'status_code: {status_code}')
+
+    tree = html.fromstring(response.content)
     abox = tree.xpath('//*[@id="rso"]/div[1]/div/div')[0]
 
     return {
@@ -28,8 +35,15 @@ def get_weather(location: str, lang: str = 'en-US') -> dict:
 
 def get_time(location: str, lang: str = 'en-US') -> dict:
     url = f'https://www.google.com/search?hl={lang}&q=time in {location}'
-    content = requests.get(url, headers=HEADERS).content
-    tree = html.fromstring(content)
+    response = requests.get(url, headers=HEADERS)
+    status_code = response.status_code
+
+    if status_code == 429:
+        raise Exception('blocked by google')
+    elif status_code != 200:
+        raise Exception(f'status_code: {status_code}')
+
+    tree = html.fromstring(response.content)
     abox = tree.xpath('//*[@id="rso"]/div[1]/div/div')[0]
 
     return {
